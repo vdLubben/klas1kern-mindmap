@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kernzinnen & Mindmapping | Vulkanen Lesmodule Brugklas</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- html2pdf Library for instant PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <!-- Header Navigation & Student Details -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-volcano"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>Kernzinnen & Woordspin</h1>
+                    <span class="sub-title">Brugklas Lesmodule Nederlands & Informatieverwerking</span>
+                </div>
+            </div>
+
+            <div class="student-info-bar">
+                <div class="input-group">
+                    <label for="student-name"><i class="fa-solid fa-user"></i> Naam:</label>
+                    <input type="text" id="student-name" placeholder="Vul je voor- en achternaam in..." oninput="window.app.saveStudentInfo()">
+                </div>
+                <div class="input-group">
+                    <label for="student-class"><i class="fa-solid fa-users-rectangle"></i> Klas:</label>
+                    <input type="text" id="student-class" placeholder="bv. 1A, B1..." oninput="window.app.saveStudentInfo()">
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <!-- Hidden file input for uploading saved work -->
+                <input type="file" id="upload-state-file" accept=".json,.pdf" style="display: none;" onchange="window.app.handleFileUpload(event)">
+                
+                <button class="btn btn-upload" id="btn-trigger-upload" onclick="document.getElementById('upload-state-file').click()" title="Upload een opgeslagen JSON of PDF bestand om verder te werken">
+                    <i class="fa-solid fa-file-arrow-up"></i>
+                    <span>📂 Werk Laden</span>
+                </button>
+
+                <button class="btn btn-save-json" onclick="window.app.downloadProgressJSON()" title="Sla je voortgang op als bestand om later door te gaan">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    <span>💾 Opslaan</span>
+                </button>
+
+                <button id="download-pdf-btn" class="btn btn-pdf" onclick="window.app.generatePDF()">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>Download PDF</span>
+                    <span class="btn-badge">Rapport</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="tab-tekststructuur" onclick="window.app.switchTab('tab-tekststructuur')">
+                <i class="fa-solid fa-bullseye"></i> 1. Kernzinnen Herkennen (Vulkanen)
+            </button>
+            <button class="nav-tab" data-tab="tab-mindmap-regels" onclick="window.app.switchTab('tab-mindmap-regels')">
+                <i class="fa-solid fa-lightbulb"></i> 2. De 7 Mindmap Regels
+            </button>
+            <button class="nav-tab" data-tab="tab-mindmap-maker" onclick="window.app.switchTab('tab-mindmap-maker')">
+                <i class="fa-solid fa-diagram-project"></i> 3. Woordspin Maker
+            </button>
+            <button class="nav-tab" data-tab="tab-verwerking" onclick="window.app.switchTab('tab-verwerking')">
+                <i class="fa-solid fa-pen-to-square"></i> 4. Vragen & Verwerking
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+
+        <!-- TAB 1: KERNZINNEN HERKENNEN (VULKANEN) -->
+        <section id="tab-tekststructuur" class="tab-pane active">
+            
+            <!-- Instruction Box for Brugklas: How to find core sentences -->
+            <div class="kernzin-instruction-card">
+                <div class="instruction-header">
+                    <span class="badge-tip"><i class="fa-solid fa-key"></i> Goudzoeker Tip</span>
+                    <h2>Hoe vind je de Kernzin van een alinea?</h2>
+                </div>
+                <div class="tips-grid">
+                    <div class="tip-box">
+                        <div class="tip-icon"><i class="fa-solid fa-arrow-down-up-across-line"></i></div>
+                        <h4>1. Kijk vooraan of achteraan</h4>
+                        <p>De kernzin staat bij de meeste alinea's in de <strong>eerste of de laatste zin</strong>.</p>
+                    </div>
+                    <div class="tip-box">
+                        <div class="tip-icon"><i class="fa-solid fa-circle-question"></i></div>
+                        <h4>2. Stel de hoofdvraag</h4>
+                        <p>Vraag jezelf af: <em>"Waar gaat deze alinea vooral over?"</em> De kernzin geeft in 1 zin antwoord.</p>
+                    </div>
+                    <div class="tip-box">
+                        <div class="tip-icon"><i class="fa-solid fa-filter"></i></div>
+                        <h4>3. Filter voorbeelden weg</h4>
+                        <p>Getallen, weetjes en voorbeelden zijn details. Laat die weg bij het zoeken naar de kern!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pane-grid">
+                
+                <!-- Left Side: Interactive Text Reader with Highlighting -->
+                <div class="text-reader-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-volcano"></i> Leestekst: Vulkanen: Vurige Bergen op Aarde</h2>
+                        <div class="highlighter-toolbar">
+                            <span class="toolbar-label">Markeerstift:</span>
+                            <button class="hl-btn active" data-color="kernzin" onclick="window.app.setHighlightColor('kernzin')">
+                                <span class="dot kernzin-dot"></span> Kernzin (Belangrijkst!)
+                            </button>
+                            <button class="hl-btn" data-color="structuur" onclick="window.app.setHighlightColor('structuur')">
+                                <span class="dot structuur-dot"></span> Detail / Weetje
+                            </button>
+                            <button class="hl-btn hl-clear" onclick="window.app.clearHighlights()">
+                                <i class="fa-solid fa-eraser"></i> Wissen
+                            </button>
+                            <button class="hl-btn hl-answer-btn" onclick="window.app.toggleAnswerModel()" title="Bekijk het antwoordmodel van de kernzinnen">
+                                <i class="fa-solid fa-lightbulb"></i> <span id="answer-model-btn-text">Antwoordmodel Controleren</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="text-instruction-banner">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>Gebruik de <strong>groene markeerstift</strong> om in elke alinea de kernzin aan te strepen!</span>
+                    </div>
+
+                    <div id="interactive-text-body" class="interactive-text">
+                        <h3>Alinea 1: Wat is een vulkaan?</h3>
+                        <p id="para-1">Een vulkaan is een opening in de aardkorst waar heet, vloeibaar gesteente uit de aarde naar buiten komt. Diep onder de harde aardkorst heersen namelijk temperaturen van wel 1000 tot 1200 °C, waardoor vast gesteente smelt tot vloeibaar magma. Wanneer dit magma tijdens een uitbarsting naar boven stroomt en buiten de vulkaan komt, noemen we het lava. Vulkanen ontstaan vooral op plekken waar de grote aardplaten tegen elkaar botsen of uit elkaar schuiven, zoals in de bekende 'Ring van Vuur' rond de Stille Oceaan waar meer dan 450 actieve vulkanen liggen.</p>
+
+                        <h3>Alinea 2: Hoe ontstaat een uitbarsting?</h3>
+                        <p id="para-2">Een vulkaanuitbarsting ontstaat door de enorme druk van gassen en magma die zich onder de grond opbouwt. Je kunt dit vergelijken met een fles frisdrank waar je heel hard mee schudt: als je de dop er af haalt, spuit de prik er met veel geweld uit. Een beroemd historisch voorbeeld is de verwoestende uitbarsting van de Vesuvius in het jaar 79 na Chr., waarbij de Romeinse stad Pompeï werd bedolven. Ook in 1980 ontplofte Mount St. Helens in de VS. Als de druk onder de aardkorst te hoog wordt, baant het magma zich een weg naar buiten en vliegen er niet alleen lava, maar ook aswolken en stenen kilometers ver de lucht in.</p>
+
+                        <h3>Alinea 3: Verschillende typen vulkanen</h3>
+                        <p id="para-3">Er bestaan verschillende typen vulkanen op aarde, die er elk heel anders uitzien. Schildvulkanen zijn bijvoorbeeld heel breed en plat omdat hun dunne lava er langzaam en rustig uit stroomt, zoals bij de Mauna Loa op Hawaï. Stratovulkanen zijn juist hele steile bergen die ontstaan door hele heftige, explosieve uitbarstingen met dikke lava en as. Bekende voorbeelden van zulke steile stratovulkanen zijn de Mount Fuji in Japan en de Eyjafjallajökull op IJsland, die in 2010 het hele Europese vliegverkeer stillegde. Kortom, de vorm van een vulkaan hangt af van hoe explosief de uitbarsting is.</p>
+
+                        <h3>Alinea 4: Gevaren én voordelen van vulkanen</h3>
+                        <p id="para-4">Hoewel vulkaanuitbarstingen erg gevaarlijk zijn voor mensen, hebben vulkanen ook belangrijke voordelen. De vulkanische as die na een uitbarsting neerkomt, maakt de grond rondom vulkanen in landen zoals Italië en Indonesië ontzettend vruchtbaar voor de landbouw van druiven en rijst. Bovendien gebruiken mensen in landen zoals IJsland de warmte uit de aarde om meer dan 90% van hun huizen te verwarmen en schone stroom op te wekken. Vulkanen zorgen dus voor gevaar, maar leveren ook vruchtbare grond en energie op.</p>
+                    </div>
+
+                    <!-- COLLAPSIBLE ANSWER MODEL PANEL (ANTWOORDMODEL CONTROLE) -->
+                    <div id="answer-model-panel" class="answer-model-card" style="display: none;">
+                        <div class="answer-model-header">
+                            <h3><i class="fa-solid fa-graduation-cap"></i> Antwoordmodel Kernzinnen (Controle)</h3>
+                            <span class="badge-answer-check"><i class="fa-solid fa-circle-check"></i> Officieel Model</span>
+                        </div>
+                        <div class="answer-model-content">
+                            <div class="model-item">
+                                <strong>Alinea 1 (Wat is een vulkaan?):</strong>
+                                <p class="model-sentence">"Een vulkaan is een opening in de aardkorst waar heet, vloeibaar gesteente uit de aarde naar buiten komt."</p>
+                                <span class="model-explanation"><i class="fa-solid fa-circle-info"></i> Eerste zin van de alinea: bevat de kern-definitie van een vulkaan.</span>
+                            </div>
+                            <div class="model-item">
+                                <strong>Alinea 2 (Hoe ontstaat een uitbarsting?):</strong>
+                                <p class="model-sentence">"Een vulkaanuitbarsting ontstaat door de enorme druk van gassen en magma die zich onder de grond opbouwt."</p>
+                                <span class="model-explanation"><i class="fa-solid fa-circle-info"></i> Eerste zin van de alinea: legt de hoofdoorzaak van de uitbarsting uit.</span>
+                            </div>
+                            <div class="model-item">
+                                <strong>Alinea 3 (Verschillende typen vulkanen):</strong>
+                                <p class="model-sentence">"Schildvulkanen zijn bijvoorbeeld heel breed en plat omdat hun dunne lava er langzaam en rustig uit stroomt. Stratovulkanen zijn juist hele steile bergen die ontstaan door hele heftige, explosieve uitbarstingen met dikke lava en as."</p>
+                                <span class="model-explanation"><i class="fa-solid fa-circle-info"></i> Kern-informatie: legt precies uit welke specifieke typen vulkanen (schild- en stratovulkanen) er zijn en wat de kenmerken zijn.</span>
+                            </div>
+                            <div class="model-item">
+                                <strong>Alinea 4 (Gevaren én voordelen):</strong>
+                                <p class="model-sentence">"Vulkanen zorgen dus voor gevaar, maar leveren ook vruchtbare grond en energie op."</p>
+                                <span class="model-explanation"><i class="fa-solid fa-circle-info"></i> Slotzin van de alinea: vat zowel de gevaren als het nut in 1 kernzin samen.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Interactive Questions - Kernzinnen per alinea -->
+                <div class="questions-side-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-bullseye"></i> Kernzinnen Oefening</h2>
+                        <span class="card-subtitle">Kies per alinea wat volgens jou de kernzin is.</span>
+                    </div>
+
+                    <div class="question-list">
+                        
+                        <!-- Question Alinea 1 -->
+                        <div class="question-item">
+                            <label class="q-label">1. Alinea 1 (Wat is een vulkaan?): Welke zin is de kernzin?</label>
+                            <div class="radio-options">
+                                <label><input type="radio" name="q_par1" value="A" onchange="window.app.saveAnswers()"> A) Een vulkaan is een opening in de aardkorst waar heet, vloeibaar gesteente uit de aarde naar buiten komt.</label>
+                                <label><input type="radio" name="q_par1" value="B" onchange="window.app.saveAnswers()"> B) Wanneer magma buiten de vulkaan komt, noemen we het lava.</label>
+                                <label><input type="radio" name="q_par1" value="C" onchange="window.app.saveAnswers()"> C) Onder de aardkorst is het heel erg heet.</label>
+                            </div>
+                        </div>
+
+                        <!-- Question Alinea 2 -->
+                        <div class="question-item">
+                            <label class="q-label">2. Alinea 2 (Uitbarsting): Welke zin is de kernzin?</label>
+                            <div class="radio-options">
+                                <label><input type="radio" name="q_par2" value="A" onchange="window.app.saveAnswers()"> A) Je kunt een vulkaan vergelijken met een fles frisdrank.</label>
+                                <label><input type="radio" name="q_par2" value="B" onchange="window.app.saveAnswers()"> B) Een vulkaanuitbarsting ontstaat door de enorme druk van gassen en magma onder de grond.</label>
+                                <label><input type="radio" name="q_par2" value="C" onchange="window.app.saveAnswers()"> C) As en stenen vliegen kilometers ver de lucht in.</label>
+                            </div>
+                        </div>
+
+                        <!-- Question Alinea 3 -->
+                        <div class="question-item">
+                            <label class="q-label">3. Alinea 3 (Typen): Welke passage bevat de kern van de alinea?</label>
+                            <div class="radio-options">
+                                <label><input type="radio" name="q_par3" value="A" onchange="window.app.saveAnswers()"> A) Schildvulkanen zijn heel breed en plat... Stratovulkanen zijn juist hele steile bergen die ontstaan door heftige uitbarstingen met dikke lava en as.</label>
+                                <label><input type="radio" name="q_par3" value="B" onchange="window.app.saveAnswers()"> B) Er bestaan verschillende typen vulkanen op aarde.</label>
+                                <label><input type="radio" name="q_par3" value="C" onchange="window.app.saveAnswers()"> C) De vorm van een vulkaan hangt af van hoe explosief de uitbarsting is.</label>
+                            </div>
+                        </div>
+
+                        <!-- Question Alinea 4 -->
+                        <div class="question-item">
+                            <label class="q-label">4. Alinea 4 (Gevaar & Nut): Welke zin is de kernzin?</label>
+                            <div class="radio-options">
+                                <label><input type="radio" name="q_par4" value="A" onchange="window.app.saveAnswers()"> A) Vulkanen zorgen voor gevaar, maar leveren ook vruchtbare grond en energie op.</label>
+                                <label><input type="radio" name="q_par4" value="B" onchange="window.app.saveAnswers()"> B) In IJsland verwarmen ze huizen met aardwarmte.</label>
+                                <label><input type="radio" name="q_par4" value="C" onchange="window.app.saveAnswers()"> C) Vulkanische as daalt neer na een uitbarsting.</label>
+                            </div>
+                        </div>
+
+                        <!-- Short Reflection Question -->
+                        <div class="question-item">
+                            <label class="q-label" for="q-summary-words">5. Schrijf in 4 korte losse woorden de kern van de 4 alinea's op (bv: 1. Krater, 2. Uitbarsting...):</label>
+                            <textarea id="q-summary-words" rows="3" placeholder="1. ...&#10;2. ...&#10;3. ...&#10;4. ..." oninput="window.app.saveAnswers()"></textarea>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- TAB 2: DE 7 MINDMAP REGELS -->
+        <section id="tab-mindmap-regels" class="tab-pane">
+            <div class="pane-grid-2col">
+                
+                <!-- Left Side: Explanation & Rules -->
+                <div class="theory-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-graduation-cap"></i> Wat is een Mindmap & De 7 Gouden Regels</h2>
+                    </div>
+
+                    <div class="mindmap-explanation">
+                        <p>Een <strong>mindmap (woordspin)</strong> is een visuele manier om de kern uit een tekst te ordenen. Vanuit het centrale onderwerp werk je met takken, trefwoorden, kleuren en tekeningen. Je hersenen kunnen deze informatie veel sneller en beter onthouden!</p>
+                        
+                        <div class="rules-visual-grid">
+                            
+                            <div class="rule-box" data-rule="1">
+                                <div class="rule-num">1</div>
+                                <div class="rule-content">
+                                    <h4>Start met een centraal beeld of woord</h4>
+                                    <p>Plaats het hoofdonderwerp (zoals 🌋 Vulkanen) precies in het midden.</p>
+                                </div>
+                            </div>
+
+                            <div class="rule-box" data-rule="2">
+                                <div class="rule-num">2</div>
+                                <div class="rule-content">
+                                    <h4>Maak takken & subtakken (dik → dun)</h4>
+                                    <p>Hoofdtakken beginnen dik bij het centrum en worden dunner naar buiten.</p>
+                                </div>
+                            </div>
+
+                            <div class="rule-box" data-rule="3">
+                                <div class="rule-num">3</div>
+                                <div class="rule-content">
+                                    <h4>Gebruik maximaal 1 sleutelwoord per tak</h4>
+                                    <p>Geen lappen tekst! Slechts 1 woord triggert je brein het beste.</p>
+                                </div>
+                            </div>
+
+                            <div class="rule-box" data-rule="4">
+                                <div class="rule-num">4</div>
+                                <div class="rule-content">
+                                    <h4>Van globaal naar specifiek</h4>
+                                    <p>Bij het midden staan de kern-onderwerpen, aan de buitenkant de details.</p>
+                                </div>
+                            </div>
+
+                            <div class="rule-box" data-rule="5">
+                                <div class="rule-num">5</div>
+                                <div class="rule-content">
+                                    <h4>Werk met de klok mee (start op 1 uur)</h4>
+                                    <p>Zo kan iedereen je mindmap logisch en in de juiste volgorde lezen!</p>
+                                </div>
+                            </div>
+
+                            <div class="rule-box" data-rule="6">
+                                <div class="rule-num">6</div>
+                                <div class="rule-content">
+                                    <h4>Gebruik verschillende kleuren per tak</h4>
+                                    <p>Elke tak heeft een eigen kleur. Dit stimuleert je geheugen!</p>
+                                </div>
+                            </div>
+
+                            <div class="rule-box" data-rule="7">
+                                <div class="rule-num">7</div>
+                                <div class="rule-content">
+                                    <h4>Maak tekeningen en icoontjes</h4>
+                                    <p>Icoontjes zeggen meer dan 1000 woorden en maken het leren leuk!</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Model Showcase & Quiz -->
+                <div class="showcase-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-image"></i> Voorbeeld: De Mindmap "Aarde"</h2>
+                    </div>
+
+                    <div class="example-image-container">
+                        <div class="image-wrapper">
+                            <img src="https://antigravity-media.s3.amazonaws.com/mindmap_earth_sample.png" id="sample-mindmap-img" alt="Voorbeeld Mindmap Aarde" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/MindMapConcept.png/640px-MindMapConcept.png'">
+                            <div class="img-tag tag-1">1. Centraal Beeld</div>
+                            <div class="img-tag tag-2">2. Dikke → Dunne takken</div>
+                            <div class="img-tag tag-5">5. Met de klok mee (1 uur)</div>
+                            <div class="img-tag tag-6">6. Kleur per tak</div>
+                            <div class="img-tag tag-7">7. Plaatjes & Icoontjes</div>
+                        </div>
+                        <p class="img-caption">Bestudeer hoe deze mindmap over de "Aarde" alle 7 regels toepast!</p>
+                    </div>
+
+                    <div class="rule-quiz-box">
+                        <h3><i class="fa-solid fa-vial-circle-check"></i> Test je kennis van de 7 regels</h3>
+                        
+                        <div class="quiz-q">
+                            <p><strong>Vraag:</strong> Waarom is regel 3 (max 1 woord per tak) zo belangrijk bij een mindmap?</p>
+                            <div class="quiz-options">
+                                <label><input type="radio" name="quiz_r3" value="A" onchange="window.app.checkQuiz()"> A) Omdat 1 sleutelwoord je brein snel laat associeren en overzichtelijk is.</label>
+                                <label><input type="radio" name="quiz_r3" value="B" onchange="window.app.checkQuiz()"> B) Omdat je anders te veel inkt gebruikt op papier.</label>
+                                <label><input type="radio" name="quiz_r3" value="C" onchange="window.app.checkQuiz()"> C) Maakt niet uit, hele alinea's mag ook.</label>
+                            </div>
+                        </div>
+
+                        <div id="quiz-feedback" class="quiz-feedback"></div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- TAB 3: INTERACTIEVE WOORDSPIN / MINDMAP MAKER -->
+        <section id="tab-mindmap-maker" class="tab-pane">
+            <div class="mindmap-studio-container">
+                
+                <!-- TOP BAR: ALL 7 RULES CHECK STATUS BAR -->
+                <div class="compact-rules-wrapper">
+                    <div class="rules-status-bar" onclick="window.mindmapApp.toggleRulesCollapse()">
+                        <span class="status-title"><i class="fa-solid fa-list-check"></i> 7 Regels Check:</span>
+                        <div id="rules-badge-container" class="rules-badge-container">
+                            <span id="check-r1" class="rule-badge pass"><i class="fa-solid fa-check"></i> 1. Middenwoord</span>
+                            <span id="check-r2" class="rule-badge pass"><i class="fa-solid fa-check"></i> 2. Dik→Dun Takken</span>
+                            <span id="check-r3" class="rule-badge pass"><i class="fa-solid fa-check"></i> 3. Max 1 Woord/Tak</span>
+                            <span id="check-r4" class="rule-badge pass"><i class="fa-solid fa-check"></i> 4. Globaal→Specifiek</span>
+                            <span id="check-r5" class="rule-badge pass"><i class="fa-solid fa-check"></i> 5. Klokmee (1 uur)</span>
+                            <span id="check-r6" class="rule-badge pass"><i class="fa-solid fa-check"></i> 6. Kleuren per tak</span>
+                            <span id="check-r7" class="rule-badge pass"><i class="fa-solid fa-check"></i> 7. Icoontjes</span>
+                        </div>
+                        <button class="btn-collapse-toggle" title="Klap regels in/uit">
+                            <i id="rules-toggle-icon" class="fa-solid fa-chevron-up"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- COMPACT TOOLBAR WITH COLLAPSIBLE OPTIONS -->
+                <div class="studio-toolbar compact-toolbar">
+                    
+                    <!-- Direct Live Text Input for Selected Branch -->
+                    <div class="toolbar-section node-editor-box">
+                        <span class="tb-title"><i class="fa-solid fa-pen-to-square"></i> Tak Tekst:</span>
+                        <input type="text" id="mm-node-text-input" placeholder="Klik op een tak om te typen..." oninput="window.mindmapApp.updateSelectedNodeText(this.value)">
+                    </div>
+
+                    <!-- Quick Branch Action Buttons -->
+                    <div class="toolbar-section action-btn-group">
+                        <button class="btn btn-sm btn-primary" onclick="window.mindmapApp.addMainBranch()" title="Voeg een nieuwe hoofdtak toe">
+                            <i class="fa-solid fa-code-branch"></i> + Hoofdtak
+                        </button>
+                        <button class="btn btn-sm btn-secondary" onclick="window.mindmapApp.addSubBranch()" title="Voeg een subtak toe aan geselecteerde tak">
+                            <i class="fa-solid fa-diagram-next"></i> + Subtak
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="window.mindmapApp.deleteSelectedNode()" title="Verwijder geselecteerde tak">
+                            <i class="fa-solid fa-trash"></i> Wissen
+                        </button>
+                    </div>
+
+                    <!-- Styling options -->
+                    <div class="toolbar-section style-btn-group">
+                        <span class="tb-title"><i class="fa-solid fa-palette"></i> Takkleur/Icoon:</span>
+                        <input type="color" id="mm-node-color" value="#ef4444" title="Kies takkleur" onchange="window.mindmapApp.changeNodeColor(this.value)">
+                        
+                        <!-- Visual Grid Icon Picker Popover Panel (4 icons per row) -->
+                        <div class="icon-picker-dropdown">
+                            <button id="icon-picker-btn" type="button" class="icon-picker-trigger" onclick="window.mindmapApp.toggleIconPicker(event)" title="Kies een icoontje voor het geselecteerde onderdeel">
+                                <span id="icon-picker-current">📌</span> <i class="fa-solid fa-chevron-down" style="font-size:0.75rem;"></i>
+                            </button>
+                            <div id="icon-picker-panel" class="icon-picker-grid-panel" style="display: none;" onclick="event.stopPropagation()">
+                                <div class="icon-grid-header">
+                                    <span>Kies Icoontje (4 per rij):</span>
+                                    <button type="button" class="icon-clear-btn" onclick="window.mindmapApp.selectGridIcon('')" title="Geen icoon">Geen 🚫</button>
+                                </div>
+                                <div id="icon-grid-container" class="icon-grid-container">
+                                    <!-- Populated dynamically in mindmap.js -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Toggle More Menu (Inklapbaar) -->
+                    <div class="toolbar-section">
+                        <button class="btn btn-sm btn-outline" onclick="window.mindmapApp.toggleMoreToolbar()" title="Meer opties (Onderwerp / Presets / Reset)">
+                            <i class="fa-solid fa-gear"></i> <span id="more-btn-label">Meer Opties ▼</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- COLLAPSIBLE EXPANDED TOOLBAR PANEL (INKLAPBAAR MENU) -->
+                <div id="collapsible-toolbar-panel" class="collapsible-toolbar-panel" style="display: none;">
+                    <div class="panel-section">
+                        <span class="tb-title"><i class="fa-solid fa-sliders"></i> Centraal Onderwerp:</span>
+                        <input type="text" id="mm-center-title" value="Vulkanen" placeholder="Centraal onderwerp..." oninput="window.mindmapApp.updateCenterTitle(this.value)">
+                    </div>
+                    <div class="panel-section">
+                        <button class="btn btn-sm btn-accent" onclick="window.mindmapApp.loadPresetTekststructuur()">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Vulkanen Voorbeeld
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="window.mindmapApp.startEmptyMindmap()">
+                            <i class="fa-solid fa-file-circle-plus"></i> Lege Mindmap (Zelf maken)
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="window.mindmapApp.resetCanvas()">
+                            <i class="fa-solid fa-rotate-left"></i> Herstel
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Interactive SVG / HTML Canvas Area -->
+                <div id="mindmap-canvas-container" class="mindmap-canvas-wrapper">
+                    
+                    <!-- FLOATING DIRECT CANVAS TOOLBAR OVERLAY -->
+                    <div id="canvas-floating-node-toolbar" class="canvas-floating-node-toolbar" style="display: none;">
+                        <input type="text" id="floating-edit-input" placeholder="Typ hier je tak tekst..." oninput="window.mindmapApp.updateSelectedNodeText(this.value)" onkeydown="window.mindmapApp.handleInlineEditKey(event)">
+                        <button class="btn-float btn-float-add" id="floating-add-btn" onclick="window.mindmapApp.addBranchForSelected()" title="Voeg tak toe"><i class="fa-solid fa-plus"></i><span id="floating-add-label"> Subtak</span></button>
+                        <button class="btn-float btn-float-del" id="floating-del-btn" onclick="window.mindmapApp.deleteSelectedNode()" title="Verwijder tak of hele mindmap"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+
+                    <!-- Direct Inline Floating Editor overlay for easy typing -->
+                    <div id="node-inline-editor" class="node-inline-editor" style="display: none;">
+                        <input type="text" id="inline-edit-input" placeholder="Type je trefwoord..." onblur="window.mindmapApp.commitInlineEdit()" onkeydown="window.mindmapApp.handleInlineEditKey(event)">
+                    </div>
+
+                    <svg id="mindmap-svg" width="1000" height="650" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+                                <feDropShadow dx="2" dy="4" stdDeviation="4" flood-opacity="0.15" />
+                            </filter>
+                        </defs>
+                        <!-- Clockwise direction helper guide circle -->
+                        <circle cx="500" cy="325" r="280" stroke="rgba(203, 213, 225, 0.4)" stroke-width="1.5" stroke-dasharray="6,6" fill="none" />
+                        <text x="500" y="35" text-anchor="middle" fill="#94a3b8" font-size="12" font-weight="600">Start op 1 uur 🕐 ➔ Met de klok mee</text>
+                        <g id="svg-connections"></g>
+                        <g id="svg-nodes"></g>
+                    </svg>
+                    
+                    <div class="canvas-help-overlay">
+                        <span><i class="fa-solid fa-pointer"></i> Klik op een tak om te bewerken in de balk of dubbelklik om te typen! • Geen scrollen nodig!</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- TAB 4: VERWERKING & REFLECTIE -->
+        <section id="tab-verwerking" class="tab-pane">
+            <div class="reflection-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-clipboard-check"></i> Verwerkingsopdracht & Reflectie</h2>
+                    <span class="card-subtitle">Beantwoord de onderstaande vragen om je lesmodule af te ronden.</span>
+                </div>
+
+                <div class="reflection-form">
+                    
+                    <div class="form-group">
+                        <label for="ref-q1">1. Waarom helpt het zoeken van de kernzin jou om snel een mindmap (woordspin) te maken van een tekst?</label>
+                        <textarea id="ref-q1" rows="3" placeholder="Leg uit in je eigen woorden..." oninput="window.app.saveAnswers()"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ref-q2">2. Bekijk jouw gemaakte mindmap in Tab 3. Welke hoofdtakken heb je gekozen en waarom sluiten die aan bij de tekst?</label>
+                        <textarea id="ref-q2" rows="3" placeholder="Tak 1: ..., Tak 2: ..., Tak 3: ..." oninput="window.app.saveAnswers()"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ref-q3">3. Welke van de 7 mindmap-regels vond je het meest handig om te gebruiken?</label>
+                        <textarea id="ref-q3" rows="3" placeholder="Bijvoorbeeld: de icoontjes toevoegen of de verschillende kleuren per tak..." oninput="window.app.saveAnswers()"></textarea>
+                    </div>
+
+                    <div class="completion-banner">
+                        <div class="banner-icon"><i class="fa-solid fa-award"></i></div>
+                        <div class="banner-text">
+                            <h3>Klaar met de lesmodule?</h3>
+                            <p>Klik op de knop <strong>"Download PDF"</strong> om jouw antwoorden en gemaakte Vulkanen-mindmap te downloaden!</p>
+                        </div>
+                        <button class="btn btn-pdf btn-lg" onclick="window.app.generatePDF()">
+                            <i class="fa-solid fa-file-pdf"></i> Download PDF Rapport Now
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- HIDDEN PDF REPORT TEMPLATE (Rendered by html2pdf) -->
+    <div id="pdf-report-template" class="pdf-template">
+        <div class="pdf-header">
+            <div class="pdf-title">
+                <h1>Lesrapport: Kernzinnen & Woordspin (Vulkanen)</h1>
+                <p>Brugklas Verwerking Nederlands & Informatieverwerking</p>
+            </div>
+            <div class="pdf-meta">
+                <p><strong>Naam:</strong> <span id="pdf-student-name"></span></p>
+                <p><strong>Klas:</strong> <span id="pdf-student-class"></span></p>
+                <p><strong>Datum:</strong> <span id="pdf-date"></span></p>
+            </div>
+        </div>
+
+        <hr class="pdf-divider">
+
+        <!-- PDF Section 1: Questions & Answers -->
+        <div class="pdf-section">
+            <h2>1. Kernzinnen Herkennen (Vulkanen tekst)</h2>
+            <div class="pdf-qa-item">
+                <strong>Alinea 1 (Wat is een vulkaan?):</strong>
+                <p id="pdf-ans-q1" class="pdf-ans"></p>
+            </div>
+            <div class="pdf-qa-item">
+                <strong>Alinea 2 (Hoe ontstaat een uitbarsting?):</strong>
+                <p id="pdf-ans-q2" class="pdf-ans"></p>
+            </div>
+            <div class="pdf-qa-item">
+                <strong>Alinea 3 (Verschillende typen vulkanen):</strong>
+                <p id="pdf-ans-q3" class="pdf-ans"></p>
+            </div>
+            <div class="pdf-qa-item">
+                <strong>Alinea 4 (Gevaren en voordelen):</strong>
+                <p id="pdf-ans-q4" class="pdf-ans"></p>
+            </div>
+            <div class="pdf-qa-item">
+                <strong>Samenvatting in 4 kernwoorden:</strong>
+                <p id="pdf-ans-q5" class="pdf-ans"></p>
+            </div>
+        </div>
+
+        <!-- PDF Section 2: Mindmap snapshot -->
+        <div class="pdf-section pdf-page-break">
+            <h2>2. Gemaakte Vulkanen Woordspin / Mindmap</h2>
+            <p class="pdf-sub">Gegenereerd conform de 7 gouden mindmap regels:</p>
+            <div id="pdf-mindmap-container" class="pdf-mm-container">
+                <!-- SVG Snapshot image rendered dynamically -->
+            </div>
+            
+            <!-- Hidden Embedded Progress JSON for 100% PDF state loading fallback -->
+            <div id="pdf-embedded-json-wrapper" style="display:none; visibility:hidden; height:0; overflow:hidden;"></div>
+        </div>
+
+        <!-- PDF Section 3: Reflection -->
+        <div class="pdf-section">
+            <h2>3. Reflectie & Verwerking</h2>
+            <div class="pdf-qa-item">
+                <strong>1. Waarom helpt een kernzin bij een mindmap?</strong>
+                <p id="pdf-ans-ref1" class="pdf-ans"></p>
+            </div>
+            <div class="pdf-qa-item">
+                <strong>2. Gekozen hoofdtakken:</strong>
+                <p id="pdf-ans-ref2" class="pdf-ans"></p>
+            </div>
+            <div class="pdf-qa-item">
+                <strong>3. Ervaring met de 7 mindmap-regels:</strong>
+                <p id="pdf-ans-ref3" class="pdf-ans"></p>
+            </div>
+        </div>
+        
+        <div class="pdf-footer">
+            <p>Gegenereerd via GitHub Lesmodule Kernzinnen & Woordspin (Vulkanen)</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="mindmap.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
