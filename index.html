@@ -62,10 +62,16 @@
                     <span>💾 Opslaan</span>
                 </button>
 
-                <button id="download-pdf-btn" class="btn btn-pdf" onclick="window.app.generatePDF()">
+                <button id="download-pdf-btn" class="btn btn-pdf" onclick="window.app.generatePDF()" title="Exporteer je ingevulde lesvoortgang als PDF rapport">
                     <i class="fa-solid fa-file-pdf"></i>
                     <span>Download PDF</span>
                     <span class="btn-badge">Rapport</span>
+                </button>
+
+                <button id="print-assignment-btn" class="btn btn-print" onclick="window.print()" title="Print het volledige lespakket of sla op als nette PDF met behoud van opmaak">
+                    <i class="fa-solid fa-print"></i>
+                    <span>Printen / PDF</span>
+                    <span class="btn-badge">Werkblad</span>
                 </button>
             </div>
         </div>
@@ -489,6 +495,23 @@
                     
                     <div class="canvas-help-overlay">
                         <span><i class="fa-solid fa-pointer"></i> Klik op een tak om te bewerken in de balk of dubbelklik om te typen! • Geen scrollen nodig!</span>
+                    </div>
+                </div>
+
+                <!-- DEDICATED OFFLINE PRINT DRAWING BOX FOR PAPER WORKSHEET PRINTING -->
+                <div id="offline-mindmap-print-box" class="offline-mindmap-print-box" style="display: none;">
+                    <div class="print-box-header">
+                        <h3><i class="fa-solid fa-diagram-project"></i> Opdracht Woordspin / Mindmap (Tekenveld)</h3>
+                        <p>Teken hieronder met pen/potlood jouw woordspin over de vulkanentekst. Denk aan de 7 regels (met de klok mee vanaf 1 uur, 1 trefwoord per tak, icoontjes en verschillende kleuren per hoofdtak)!</p>
+                    </div>
+                    <div class="print-drawing-area">
+                        <div class="print-clock-marker marker-1">1 uur 🕐 (Start)</div>
+                        <div class="print-clock-marker marker-3">3 uur 🕒</div>
+                        <div class="print-clock-marker marker-5">5 uur 🕔</div>
+                        <div class="print-clock-marker marker-7">7 uur 🕖</div>
+                        <div class="print-clock-marker marker-9">9 uur 🕘</div>
+                        <div class="print-clock-marker marker-11">11 uur 🕚</div>
+                        <div class="print-center-topic">🌋 Vulkanen</div>
                     </div>
                 </div>
 

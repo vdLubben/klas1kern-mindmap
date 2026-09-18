@@ -1,0 +1,116 @@
+{
+  "studentInfo": {
+    "name": "Brugklas Leerling",
+    "class": "1A"
+  },
+  "answers": {
+    "q_par1": "A",
+    "q_par2": "B",
+    "q_par3": "B",
+    "q_par4": "A",
+    "q5": "1. Krater 2. Uitbarsting 3. Typen 4. Nut",
+    "ref1": "Het helpt om de hoofdlijn te zien.",
+    "ref2": "Krater en Uitbarsting.",
+    "ref3": "Icoontjes gebruiken."
+  },
+  "highlights": "",
+  "mindmapState": {
+    "centerNode": {
+      "id": "center",
+      "text": "Vulkanen",
+      "icon": "🌋",
+      "x": 500,
+      "y": 325
+    },
+    "branches": [
+      {
+        "id": "b1",
+        "text": "Krater",
+        "icon": "🔥",
+        "color": "#ef4444",
+        "angle": 30,
+        "distance": 180,
+        "x": 660,
+        "y": 200,
+        "subbranches": [
+          {
+            "id": "sb1_1",
+            "text": "Lava",
+            "icon": "🔥",
+            "x": 800,
+            "y": 200
+          }
+        ]
+      },
+      {
+        "id": "b2",
+        "text": "Uitbarsting",
+        "icon": "💥",
+        "color": "#ea580c",
+        "angle": 110,
+        "distance": 190,
+        "x": 660,
+        "y": 430,
+        "subbranches": [
+          {
+            "id": "sb2_1",
+            "text": "pyroclastische wolk",
+            "icon": "💨",
+            "x": 810,
+            "y": 410
+          }
+        ]
+      }
+    ]
+  },
+  "mindmap": {
+    "centerNode": {
+      "id": "center",
+      "text": "Vulkanen",
+      "icon": "🌋",
+      "x": 500,
+      "y": 325
+    },
+    "branches": [
+      {
+        "id": "b1",
+        "text": "Krater",
+        "icon": "🔥",
+        "color": "#ef4444",
+        "angle": 30,
+        "distance": 180,
+        "x": 660,
+        "y": 200,
+        "subbranches": [
+          {
+            "id": "sb1_1",
+            "text": "Lava",
+            "icon": "🔥",
+            "x": 800,
+            "y": 200
+          }
+        ]
+      },
+      {
+        "id": "b2",
+        "text": "Uitbarsting",
+        "icon": "💥",
+        "color": "#ea580c",
+        "angle": 110,
+        "distance": 190,
+        "x": 660,
+        "y": 430,
+        "subbranches": [
+          {
+            "id": "sb2_1",
+            "text": "pyroclastische wolk",
+            "icon": "💨",
+            "x": 810,
+            "y": 410
+          }
+        ]
+      }
+    ]
+  },
+  "timestamp": "2026-09-16T16:38:58.000Z"
+}

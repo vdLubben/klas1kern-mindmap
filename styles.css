@@ -202,6 +202,21 @@ h1, h2, h3, h4 {
     margin-left: 4px;
 }
 
+.btn-print {
+    background: linear-gradient(135deg, #059669, #047857);
+    color: white;
+    padding: 9px 18px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.35);
+    position: relative;
+}
+
+.btn-print:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(5, 150, 105, 0.45);
+    background: linear-gradient(135deg, #047857, #065f46);
+}
+
 /* Nav Tabs */
 .nav-tabs {
     max-width: 1400px;
@@ -1255,5 +1270,204 @@ textarea:focus {
 .icon-grid-item.active {
     background: #fee2e2;
     border: 2px solid #ef4444;
+}
+
+/* ==========================================================================
+   OFFLINE PRINT & PDF EXPORT STYLES (@media print)
+   ========================================================================== */
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 10mm 12mm 10mm 12mm;
+    }
+
+    *,
+    *::before,
+    *::after {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        box-shadow: none !important;
+    }
+
+    body {
+        background: white !important;
+        color: #1e293b !important;
+        font-size: 10pt !important;
+        line-height: 1.4 !important;
+    }
+
+    /* Hide Web UI Navigation & Interactive Toolbar Controls */
+    .header-actions,
+    .nav-tabs,
+    .highlighter-toolbar,
+    .text-instruction-banner,
+    .btn-collapse-toggle,
+    .compact-toolbar,
+    .rules-status-bar,
+    .floating-canvas-toolbar,
+    .canvas-floating-node-toolbar,
+    .node-inline-editor,
+    .collapsible-toolbar-panel,
+    .icon-picker-grid-panel,
+    .canvas-help-overlay,
+    #download-pdf-btn,
+    #btn-trigger-upload,
+    #print-assignment-btn {
+        display: none !important;
+    }
+
+    /* Header formatting for printed paper */
+    .app-header {
+        position: static !important;
+        box-shadow: none !important;
+        border-bottom: 2px solid #ef4444 !important;
+        padding-bottom: 8px !important;
+        margin-bottom: 15px !important;
+    }
+
+    .brand-icon {
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 1.3rem !important;
+    }
+
+    .brand-text h1 {
+        font-size: 1.3rem !important;
+    }
+
+    .student-info-bar {
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+        padding: 6px 12px !important;
+        border-radius: 6px !important;
+    }
+
+    /* Make ALL 4 Tab Panes visible in print output */
+    .main-content {
+        padding: 0 !important;
+    }
+
+    .tab-pane {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        height: auto !important;
+        overflow: visible !important;
+        position: static !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* Smart Page Break Management between main sections */
+    #tab-tekststructuur {
+        page-break-after: always;
+        break-after: page;
+    }
+
+    #tab-mindmap-regels {
+        page-break-after: always;
+        break-after: page;
+    }
+
+    #tab-mindmap-maker {
+        page-break-after: always;
+        break-after: page;
+    }
+
+    .pane-grid {
+        display: block !important;
+    }
+
+    .text-reader-card,
+    .questions-side-card,
+    .rules-main-card,
+    .showcase-card,
+    .verwerking-card {
+        width: 100% !important;
+        margin-bottom: 18px !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        border: 1px solid #cbd5e1 !important;
+    }
+
+    .interactive-text p {
+        font-size: 9.5pt !important;
+        line-height: 1.45 !important;
+    }
+
+    /* Hide interactive SVG canvas in print, show offline drawing grid */
+    #mindmap-canvas-container {
+        display: none !important;
+    }
+
+    .offline-mindmap-print-box {
+        display: block !important;
+        border: 2px dashed #94a3b8 !important;
+        border-radius: 12px !important;
+        padding: 16px !important;
+        min-height: 520px !important;
+        background: #fafafa !important;
+        position: relative !important;
+        margin-top: 15px !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .print-box-header h3 {
+        color: #ef4444;
+        font-size: 1.1rem;
+        margin-bottom: 4px;
+    }
+
+    .print-box-header p {
+        font-size: 0.85rem;
+        color: #475569;
+        margin-bottom: 15px;
+    }
+
+    .print-drawing-area {
+        height: 440px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        background-color: #ffffff;
+        background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+        background-size: 20px 20px;
+        position: relative;
+    }
+
+    .print-center-topic {
+        width: 150px;
+        height: 60px;
+        background: #ef4444 !important;
+        color: white !important;
+        font-weight: 700;
+        border-radius: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 3px solid #b91c1c;
+    }
+
+    .print-clock-marker {
+        position: absolute;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #64748b;
+        background: #f1f5f9;
+        padding: 3px 8px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+    }
+
+    .marker-1  { top: 15px; right: 60px; }
+    .marker-3  { top: 190px; right: 15px; }
+    .marker-5  { bottom: 15px; right: 60px; }
+    .marker-7  { bottom: 15px; left: 60px; }
+    .marker-9  { top: 190px; left: 15px; }
+    .marker-11 { top: 15px; left: 60px; }
 }
 
